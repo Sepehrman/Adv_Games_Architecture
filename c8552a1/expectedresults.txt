@@ -1,0 +1,78 @@
+
+
+Two Thread Test:
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+Completed two thread example!
+
+
+
+Multiple Thread Test:
+
+Running 15 in parallel: 
+
+Thread: 1 / 15 current count is: 1
+Thread: 3 / 15 current count is: 2
+Thread: 4 / 15 current count is: 3
+Thread: 2 / 15 current count is: 4
+Thread: 5 / 15 current count is: 5
+Thread: 6 / 15 current count is: 6
+Thread: 7 / 15 current count is: 7
+Thread: 8 / 15 current count is: 8
+Thread: 9 / 15 current count is: 9
+Thread: 10 / 15 current count is: 10
+Thread: 11 / 15 current count is: 11
+Thread: 12 / 15 current count is: 12
+Thread: 13 / 15 current count is: 13
+Thread: 14 / 15 current count is: 14
+Thread: 15 / 15 current count is: 15
+
+Completed multiple threads example!
+
+
+
+
+Reader-Writer Test:
+Writer: buffer[0] = D
+		Reader: buffer[0] = D
+Writer: buffer[1] = N
+		Reader: buffer[1] = N
+Writer: buffer[2] = Q
+		Reader: buffer[2] = Q
+Writer: buffer[3] = J
+		Reader: buffer[3] = J
+Writer: buffer[4] = A
+Writer: buffer[0] = N
+		Reader: buffer[4] = A
+		Reader: buffer[0] = N
+Writer: buffer[1] = B
+		Reader: buffer[1] = B
+Writer: buffer[2] = O
+		Reader: buffer[2] = O
+Writer: buffer[3] = N
+Writer: buffer[4] = Q
+		Reader: buffer[3] = N
+Writer: buffer[0] = W
+		Reader: buffer[4] = Q
+Writer: buffer[1] = B
+		Reader: buffer[0] = W
+		Reader: buffer[1] = B
+Writer: buffer[2] = S
+		Reader: buffer[2] = S
+Writer: buffer[3] = G
+		Reader: buffer[3] = G
+Writer: buffer[4] = S
+		Reader: buffer[4] = S
+Writer: buffer[0] = P
+		Reader: buffer[0] = P
+Writer: buffer[1] = K
+		Reader: buffer[1] = K
+Writer: buffer[2] = F
+		Reader: buffer[2] = F
+Writer: buffer[3] = E
+		Reader: buffer[3] = E
+Writer: buffer[4] = W
+		Reader: buffer[4] = W
+
+Completed Reader-Writer example!
+
