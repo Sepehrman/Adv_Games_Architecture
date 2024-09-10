@@ -1,0 +1,3 @@
+C:/Users/Sepeh/source/repos/Adv_Games_Architecture/c8552a1/cmake-build-debug/CMakeFiles/c8552a1.dir
+C:/Users/Sepeh/source/repos/Adv_Games_Architecture/c8552a1/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Sepeh/source/repos/Adv_Games_Architecture/c8552a1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
