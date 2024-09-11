@@ -78,20 +78,25 @@ void CMultiThread::TwoThreadTest()
 // Multiple thread synchronization (single resource)
 //
 
+
 void CMultiThread::MultiThreadTestWorkerThread(CMultiThread *th, int num, int max)
 {
     //### This function will need some sort of synchronization...
-    std::unique_lock<std::mutex> lock(mtx);
-    th->IncrementCurrentThreadId();
 
-    int count = th->GetCurrentThreadId();
-    cv.wait(lock, [count, &num] { return num == count; });
+    std::unique_lock<std::mutex> lock(mtx);
+    int id = th->GetCurrentThreadId();
+
+    cv.wait(lock, [id, num] { return id == num; });
+
 
     std::cout << "Thread: ";
     std::cout << num + 1 << " / " << max;
     std::cout << " current count is: ";
     std::cout << th->GetCurrentThreadId() << std::endl;
-    cv.notify_all();
+
+    th->IncrementCurrentThreadId();
+    cv.notify_one();
+
 }
 
 void CMultiThread::MultiThreadTest()

@@ -1,0 +1,3 @@
+"C:\Program Files\JetBrains\CLion 2023.1.1\bin\cmake\win\x64\bin\cmake.exe" -E rm -f CMakeFiles\c8552a1.dir/objects.a
+C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\ar.exe qc CMakeFiles\c8552a1.dir/objects.a @CMakeFiles\c8552a1.dir\objects1
+C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE -g -Wl,--whole-archive CMakeFiles\c8552a1.dir/objects.a -Wl,--no-whole-archive -o c8552a1.exe -Wl,--out-implib,libc8552a1.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\c8552a1.dir\linkLibs.rsp
