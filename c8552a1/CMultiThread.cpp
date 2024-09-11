@@ -10,6 +10,8 @@
 #include "Semaphore.h"
 
 //### Define mutexes and semaphores
+std::mutex mtx;
+std::condition_variable cv;
 
 CMultiThread::CMultiThread()
 {
@@ -46,9 +48,15 @@ void CMultiThread::TwoThreadTestWorkerThread(CMultiThread *th, int n, char c, in
 {
     std::chrono::milliseconds timespan(sleepTime);
     std::this_thread::sleep_for(timespan);
-    
+
+    std::lock_guard<std::mutex> guard(mtx);
+
     //### This function will need some sort of synchronization...
-    for (int i=0; i<n; ++i) { std::cout << c; }
+    for (int i=0; i<n; ++i) {
+
+        std::cout << c;
+    }
+
     std::cout << '\n';
 }
 
@@ -58,6 +66,8 @@ void CMultiThread::TwoThreadTest()
     th2 = new std::thread(TwoThreadTestWorkerThread, this, 500, '$', 0);
     th1->join();
     th2->join();
+
+
     std::cout << "Completed two thread example!" << std::endl;
 }
 
@@ -71,15 +81,19 @@ void CMultiThread::TwoThreadTest()
 void CMultiThread::MultiThreadTestWorkerThread(CMultiThread *th, int num, int max)
 {
     //### This function will need some sort of synchronization...
+
     th->IncrementCurrentThreadId();
-    
+
+    std::unique_lock<std::mutex> lock(mtx);
+    int count = th->GetCurrentThreadId();
+    cv.wait(lock, [count, &num] { return num == count; });
+
     std::cout << "Thread: ";
     std::cout << num + 1 << " / " << max;
     std::cout << " current count is: ";
-    
+
     std::cout << th->GetCurrentThreadId() << std::endl;
-    
-    //### Remember to clean up synchronization...
+    cv.notify_one();
 }
 
 void CMultiThread::MultiThreadTest()
