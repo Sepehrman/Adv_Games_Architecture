@@ -88,7 +88,6 @@ void CMultiThread::MultiThreadTestWorkerThread(CMultiThread *th, int num, int ma
 
     cv.wait(lock, [id, num] { return id == num; });
 
-
     std::cout << "Thread: ";
     std::cout << num + 1 << " / " << max;
     std::cout << " current count is: ";
