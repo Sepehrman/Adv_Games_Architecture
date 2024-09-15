@@ -12,6 +12,7 @@
 //### Define mutexes and semaphores
 std::mutex mtx;
 std::condition_variable cv;
+bool onReady = false;
 
 CMultiThread::CMultiThread()
 {
@@ -81,40 +82,43 @@ void CMultiThread::TwoThreadTest()
 
 void CMultiThread::MultiThreadTestWorkerThread(CMultiThread *th, int num, int max)
 {
-    //### This function will need some sort of synchronization...
-
     std::unique_lock<std::mutex> lock(mtx);
-    int id = th->GetCurrentThreadId();
+    cv.wait(lock, [th, num]{ return th->GetCurrentThreadId() == num && (onReady == true); });
 
-    cv.wait(lock, [id, num] { return id == num; });
+    th->IncrementCurrentThreadId();
 
     std::cout << "Thread: ";
     std::cout << num + 1 << " / " << max;
     std::cout << " current count is: ";
+
     std::cout << th->GetCurrentThreadId() << std::endl;
 
-    th->IncrementCurrentThreadId();
-    cv.notify_one();
-
+    //### Remember to clean up synchronization...
+    lock.unlock();
+    cv.notify_all();
 }
 
 void CMultiThread::MultiThreadTest()
 {
     std::thread *threads = new std::thread[numThreads];
-    
+
     for (int id = 0; id < numThreads; id++)
         threads[id] = std::thread(MultiThreadTestWorkerThread, this, id, numThreads);
-    
+
     std::cout << "\nRunning " << numThreads;
     std::cout << " in parallel: \n" << std::endl;
-    
-    //### This function will need some sort of synchronization...
+
+    static std::mutex mtx;
+    std::lock_guard<std::mutex> guard(mtx);
+    onReady = true;
+    cv.notify_all();
+
     for(int id = 0; id < numThreads; id++)
         threads[id].join();
-    
+
     std::cout << "\nCompleted multiple threads example!\n";
     std::cout << std::endl;
-    
+
     delete [] threads;
     current = 0;
 }
