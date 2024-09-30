@@ -52,7 +52,6 @@ void CMultiThread::TwoThreadTestWorkerThread(CMultiThread *th, int n, char c, in
 
     std::lock_guard<std::mutex> guard(mtx);
 
-    //### This function will need some sort of synchronization...
     for (int i=0; i<n; ++i) {
 
         std::cout << c;
@@ -154,9 +153,12 @@ int CMultiThread::GetCurrentThreadId()
 // should never be more than 5 writes before a read and vice versa (since
 // we only have 5 buffers to use).
 
+Semaphore *empty = new Semaphore(NUM_TOTAL_BUFFERS);  // tracks empty slots
+Semaphore *full = new Semaphore(0);  // tracks full slots
+
 void CMultiThread::ReaderWriterTest()
 {
-   //### This function will need some sort of synchronization...
+    //### This function will need some sort of synchronization...
     std::thread *writerThread = new std::thread(Writer, this);
     std::thread *readerThread = new std::thread(Reader, this);
     writerThread->join();
@@ -165,29 +167,28 @@ void CMultiThread::ReaderWriterTest()
     std::cout << std::endl;
 }
 
-void CMultiThread::Writer(CMultiThread *th)
-{
-    int i, writePt = 0;
-    char data;
-    //### This function will need some sort of synchronization in the loop...
-    for (i = 0; i < DATA_LENGTH; i++) {
-        data = th->PrepareData();
+
+void CMultiThread::Writer(CMultiThread *th) {
+    int writePt = 0;
+    for (int i = 0; i < DATA_LENGTH; i++) {
+        empty->wait();  // Wait for an empty slot
+        char data = th->PrepareData();
         th->buffers[writePt] = data;
         printf("Writer: buffer[%d] = %c\n", writePt, data);
         writePt = (writePt + 1) % NUM_TOTAL_BUFFERS;
+        full->notify();  // Signal that a slot is full
     }
 }
 
-void CMultiThread::Reader(CMultiThread *th)
-{
-    int i, readPt = 0;
-    char data;
-    //### This function will need some sort of synchronization in the loop...
-    for (i = 0; i < DATA_LENGTH; i++) {
-        data = th->buffers[readPt];
+void CMultiThread::Reader(CMultiThread *th) {
+    int readPt = 0;
+    for (int i = 0; i < DATA_LENGTH; i++) {
+        full->wait();  // Wait for a full slot
+        char data = th->buffers[readPt];
         printf("\t\tReader: buffer[%d] = %c\n", readPt, data);
         readPt = (readPt + 1) % NUM_TOTAL_BUFFERS;
         th->ProcessData(data);
+        empty->notify();  // Signal that a slot is now empty
     }
 }
 

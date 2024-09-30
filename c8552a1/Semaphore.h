@@ -18,12 +18,16 @@ public:
     
     inline void notify()
     {
-        //### Use unique_lock to lock a resource
+        std::lock_guard<std::mutex> lock(mtx);
+        ++count;
+        cv.notify_one();
     }
     
     inline void wait()
     {
-        //### Use unique_lock to lock a resource
+        std::unique_lock<std::mutex> lock(mtx);
+        cv.wait(lock, [&]() {return count > 0;} );
+        --count;
     }
     
 private:
