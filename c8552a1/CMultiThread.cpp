@@ -168,29 +168,36 @@ void CMultiThread::ReaderWriterTest()
 }
 
 
-void CMultiThread::Writer(CMultiThread *th) {
+
+void CMultiThread::Writer(CMultiThread* th) {
     int writePt = 0;
     for (int i = 0; i < DATA_LENGTH; i++) {
-        empty->wait();  // Wait for an empty slot
+        // Waits for an empty buffer slot
+        empty->wait();
         char data = th->PrepareData();
         th->buffers[writePt] = data;
         printf("Writer: buffer[%d] = %c\n", writePt, data);
         writePt = (writePt + 1) % NUM_TOTAL_BUFFERS;
-        full->notify();  // Signal that a slot is full
+        // notifies the reader that a buffer slot is full
+        full->notify();
     }
 }
 
-void CMultiThread::Reader(CMultiThread *th) {
+// Reader thread function
+void CMultiThread::Reader(CMultiThread* th) {
     int readPt = 0;
     for (int i = 0; i < DATA_LENGTH; i++) {
-        full->wait();  // Wait for a full slot
+        // Waits for a full buffer slot
+        full->wait();
         char data = th->buffers[readPt];
         printf("\t\tReader: buffer[%d] = %c\n", readPt, data);
         readPt = (readPt + 1) % NUM_TOTAL_BUFFERS;
         th->ProcessData(data);
-        empty->notify();  // Signal that a slot is now empty
+        // notifies the writer that a slot is now empty
+        empty->notify();
     }
 }
+
 
 void CMultiThread::ProcessData(char data)
 {
